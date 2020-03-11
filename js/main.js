@@ -3,39 +3,49 @@
 countTodos();
 
 // capture click event
-$("#checkAll").click(function(){
+document.getElementById('checkAll').addEventListener('click', function(){
     AllDone();
 });
 
 //capture enter key press
-$('.add-todo').on('keypress',function (e) {
+document.getElementById('todo-to-add').addEventListener('keypress',function (e) {
       e.preventDefault // Do not submit form
       if (e.which == 13) { // check if enter is pressed
-        var todo = $(".add-todo").val();
+        var todo = document.getElementById('todo-to-add').value;
+        console.log(todo);
         addToDo(todo);
       }
 });
 
 // capture click event
-$('#addTODO').on('click',function () {
-    var todo = $(".add-todo").val();
+document.getElementById('addTODO').addEventListener('click',function () {
+    var todo = document.getElementById("todo-to-add").value;
+    console.log(todo);
     addToDo(todo);
 });
 
-// capute checkbox value change and transfer from ToDos to Already Done
-$('.todolist').on('change','#sortable li input[type="checkbox"]',function(){
-    if($(this).prop('checked')){
-        var doneItem = $(this).parent().parent().find('label').text();
-        $(this).parent().parent().parent().addClass('remove');
-        done(doneItem);
-        countTodos();
-    }
-});
 
-// capture click event on button on Already Done
-$('.todolist').on('click','.remove-item',function(){
-    removeItem(this);
-});
+var todos = document.querySelectorAll('#sortable li input[type="checkbox"]');
+for (var i = 0; i < todos.length; i++) {
+    todos[i].addEventListener('change',function(){
+        if(this.checked == true){
+            var doneItem = this.parentElement.innerText
+            // $(this).parent().parent().parent().addClass('remove');
+            console.log('done item: ' +doneItem);
+            done(doneItem);
+            countTodos();
+        }
+    });
+}
+
+// capture click event on button minus on Already Done 
+var already_done_elements = document.getElementsByClassName("remove-item");
+for (var i = 0; i < already_done_elements.length; i++) {
+    already_done_elements[i].addEventListener('click',function(){
+        console.log(this);
+        removeItem(this);
+    });
+}
 
 // add new todo
 function addToDo(todo){
