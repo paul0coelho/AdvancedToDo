@@ -55,12 +55,23 @@ function addToDo(todo){
 
 // count tasks (To Complete)
 function countTodos(){
-  
+    var toDos = document.getElementsByClassName("remove-item");
 }
 
 //create task (To Complete)
 function createTodo(text){
-    
+    var toDo = document.createElement("li");
+    toDo.classList.contains("ui-state-default")
+    toDo.textContent = text
+
+    var checkBox = document.createElement("input");
+    checkBox.type = "checkbox"
+    checkBox.addEventListener("click", done);
+
+    toDo.appendChild(checkBox);
+
+    var element = document.getElementById("sortable");
+    element.appendChild(toDo);
 }
 
 //mark task as done (To Complete)
