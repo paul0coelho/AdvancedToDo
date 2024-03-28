@@ -1,4 +1,3 @@
-
 // count initial ToDo
 countTodos();
 
@@ -9,8 +8,8 @@ document.getElementById('checkAll').addEventListener('click', function(){
 
 //capture enter key press
 document.getElementById('todo-to-add').addEventListener('keypress',function (e) {
-      e.preventDefault // Do not submit form
-      if (e.which == 13) { // check if enter is pressed
+      if (e.which == 13) {
+        e.preventDefault();
         var todo = document.getElementById('todo-to-add').value;
         console.log(todo);
         addToDo(todo);
@@ -24,14 +23,13 @@ document.getElementById('addTODO').addEventListener('click',function () {
     addToDo(todo);
 });
 
-
+// Adding event listeners for each existing todo item checkbox
 var todos = document.querySelectorAll('#sortable li input[type="checkbox"]');
 for (var i = 0; i < todos.length; i++) {
     todos[i].addEventListener('change',function(){
         if(this.checked == true){
-            var doneItem = this.parentElement.innerText
-            // $(this).parent().parent().parent().addClass('remove');
-            console.log('done item: ' +doneItem);
+            var doneItem = this.parentElement.textContent.trim();
+            console.log('done item: ' + doneItem);
             done(doneItem);
             countTodos();
         }
@@ -55,18 +53,25 @@ function addToDo(todo){
 
 // count tasks (To Complete)
 function countTodos(){
-    var toDos = document.getElementsByClassName("remove-item");
+    var toDos = document.querySelectorAll('#sortable li');
+    var count = 0;
+    for (var i = 0; i < toDos.length; i++) {
+        if (!toDos[i].classList.contains('completed')) {
+            count++;
+        }
+    }
+    document.querySelector('.count-todos').textContent = count;
 }
 
 //create task (To Complete)
 function createTodo(text){
     var toDo = document.createElement("li");
-    toDo.classList.contains("ui-state-default")
-    toDo.textContent = text
+    toDo.classList.add("ui-state-default");
+    toDo.textContent = text;
 
     var checkBox = document.createElement("input");
-    checkBox.type = "checkbox"
-    checkBox.addEventListener("click", done);
+    checkBox.type = "checkbox";
+    checkBox.addEventListener("change", done);
 
     toDo.appendChild(checkBox);
 
@@ -75,16 +80,25 @@ function createTodo(text){
 }
 
 //mark task as done (To Complete)
-function done(doneItem){
-    
+function done(){
+    var listItem = this.parentNode;
+    listItem.classList.toggle('completed');
+    countTodos();
 }
 
 //mark all tasks as done (To Complete)
 function AllDone(){
-    
+    var todos = document.querySelectorAll('#sortable li');
+    for (var i = 0; i < todos.length; i++) {
+        todos[i].classList.add('completed');
+    }
+    countTodos();
 }
 
 //remove done task from list (To Complete)
 function removeItem(element){
-    
+    var listItem = element.parentNode;
+    var ul = listItem.parentNode;
+    ul.removeChild(listItem);
+    countTodos();
 }
